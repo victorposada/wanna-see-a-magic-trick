@@ -60,20 +60,25 @@ data=init_dictionary(columns, cards_per_column)
 if debug:
     print(data)
 
-i = 1
-for i in range(8):
-    column_key= find_card_in_column(test,data)
-    card_position=str((find_card_position(test,data)))
-    print("Iteration nº" + str(i))
-    print("Test card is in column " + column_key + " in position " + card_position)
-    ordered_data = order_columns(column_key,data)
-    if debug:
-        print(ordered_data)
-    all_values = []
-    all_values=(get_all_values(ordered_data))
-    if debug:
-        print(all_values)
-    data = recreate_data(columns, cards_per_column, test)
-    if debug:
-        print(data)
+all_values=(get_all_values(data))
+
+for value in all_values:
+    print ("Test card: " + value)
+    test = value
+
+    for i in range(8):
+        column_key= find_card_in_column(test,data)
+        card_position=str((find_card_position(test,data)))
+        print("Iteration nº" + str(i))
+        print("Test card is in column " + column_key + " in position " + card_position)
+        ordered_data = order_columns(column_key,data)
+        if debug:
+            print(ordered_data)
+        all_values = []
+        all_values=(get_all_values(ordered_data))
+        if debug:
+            print(all_values)
+        data = recreate_data(columns, cards_per_column, test)
+        if debug:
+            print(data)
 
