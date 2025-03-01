@@ -2,10 +2,10 @@
 columns = ["A", "B", "C"]
 cards_per_column   = 7
 total   = columns * cards_per_column
-test    = "3B"
-data = {column: [] for column in columns}
-
+test    = "3C"
 all_values = []
+
+
 
 def init_dictionary (columns, cards_per_columns):
     data = {column: [] for column in columns}
@@ -23,17 +23,79 @@ def find_card_in_column (card, data):
             return key
     return None
 
-data=init_dictionary(columns, cards_per_column)
-print(data)
-print(find_card_in_column(test,data))
+def find_card_position(card, data):
+    for key, value in data.items():
+        if card in value:
+            return value.index(card)
+    return None 
 
 def order_columns (correct_column, data):
-    print(correct_column)
-    for key, value in data.items():
-        print(key)
-        print(value)
+    keys = list(data.keys())
+    correct_index = keys.index(correct_column)
+    middle_index = len(keys) // 2
+    keys.pop(correct_index)
+    keys.insert(middle_index, correct_column)
+    ordered_data = {key: data[key] for key in keys}
+    return ordered_data
 
-print(order_columns("B",data))
-for value in data.values():
-    all_values.extend(value)
-print(all_values)
+
+def get_all_values(ordered_data):
+    for value in ordered_data.values():
+        all_values.extend(value)
+    return all_values
+
+def recreate_data(columns, cards_per_column, test):
+    data = init_dictionary(columns, cards_per_column)
+    column_key = find_card_in_column(test, data)
+    ordered_data = order_columns(column_key, data)
+    all_values = get_all_values(ordered_data)
+    recreated_data = {column: [] for column in columns}
+    index = 0
+    for i in range(cards_per_column):
+        for col in columns:
+            recreated_data[col].append(all_values[index])
+            index += 1
+    
+    return recreated_data
+
+data=init_dictionary(columns, cards_per_column)
+
+for i in range(2):
+    column_key= find_card_in_column(test,data)
+    card_position=str((find_card_position(test,data)))
+
+column_key= find_card_in_column(test,data)
+card_position=str((find_card_position(test,data)))
+print("First iteration")
+print("Test card is in column " + column_key + " in position " + card_position)
+
+ordered_data = order_columns(column_key,data)
+print(ordered_data)
+
+all_values=(get_all_values(ordered_data))
+
+recreated_data = recreate_data(columns, cards_per_column, test)
+print(recreated_data)
+
+print("Second iteration")
+
+correct_column=find_card_in_column(test, recreated_data)
+card_position=str((find_card_position(test,recreated_data)))
+print("Test card is in column " + correct_column + " in position " + card_position)
+
+### Third iteration
+
+ordered_data = order_columns(column_key,recreated_data)
+print(ordered_data)
+
+all_values=(get_all_values(ordered_data))
+
+recreated_data = recreate_data(columns, cards_per_column, test)
+print(recreated_data)
+
+print("Third iteration")
+
+correct_column=find_card_in_column(test, recreated_data)
+print(correct_column)
+card_position=str((find_card_position(test,recreated_data)))
+print("Test card is in column " + correct_column + " in position " + card_position)
