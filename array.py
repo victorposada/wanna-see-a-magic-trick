@@ -1,6 +1,6 @@
 
-columns             = ["A", "B", "C"]
-cards_per_column    = 9
+columns             = ["A", "B", "C", "D"]
+cards_per_column    = 8
 total               = columns * cards_per_column
 test                = "4C"
 all_values          = []
