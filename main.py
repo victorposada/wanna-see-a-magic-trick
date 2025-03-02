@@ -1,10 +1,16 @@
 
-columns             = ["A", "B", "C"]
-cards_per_column    = 9
-total               = columns * cards_per_column
-test                = "4C"
 all_values          = []
 debug               = False   
+
+def generate_column__array(columns):
+    def generate_label(index):
+        result = []
+        while index >= 0:
+            result.append(chr(index % 26 + ord('A')))
+            index = index // 26 - 1
+        return ''.join(reversed(result))
+
+    return [generate_label(i) for i in range(columns)]
 
 def init_dictionary (columns, cards_per_columns):
     data = {column: [] for column in columns}
@@ -56,29 +62,50 @@ def recreate_data(columns, cards_per_column, test):
     
     return recreated_data
 
-data=init_dictionary(columns, cards_per_column)
-if debug:
-    print(data)
+for column_number in range(25):
+    columns = generate_column__array(column_number)
+    for cards_per_column in range(25):
 
-all_values=(get_all_values(data))
+        data=init_dictionary(columns, cards_per_column)
+        all_values=(get_all_values(data))
 
-for value in all_values:
-    print ("Test card: " + value)
-    test = value
+        stabilizers = []
 
-    for i in range(8):
-        column_key= find_card_in_column(test,data)
-        card_position=str((find_card_position(test,data)))
-        print("Iteration nº" + str(i))
-        print("Test card is in column " + column_key + " in position " + card_position)
-        ordered_data = order_columns(column_key,data)
-        if debug:
-            print(ordered_data)
-        all_values = []
-        all_values=(get_all_values(ordered_data))
-        if debug:
-            print(all_values)
-        data = recreate_data(columns, cards_per_column, test)
-        if debug:
-            print(data)
+        for value in all_values:
+            if debug:
+                print ("Test card: " + value)
+            test = value
+            stabilized = False
+            last_card_position = "null"
+            i = 1
+
+            while stabilized == False:
+                column_key= find_card_in_column(test,data)
+                if column_key == None:
+                    break
+                card_position=str((find_card_position(test,data)))
+                if card_position == last_card_position:
+                    stabilized = True
+                last_card_position = card_position
+                if debug:
+                    print("Iteration nº" + str(i))
+                    print("Test card is in column " + column_key + " in position " + card_position)
+                ordered_data = order_columns(column_key,data)
+                if debug:
+                    print(ordered_data)
+                all_values = []
+                all_values=(get_all_values(ordered_data))
+                if debug:
+                    print(all_values)
+                data = recreate_data(columns, cards_per_column, test)
+                if debug:
+                    print(data)
+                i = i + 1
+            
+            stabilizers.append(last_card_position)
+            stabilizers = list(dict.fromkeys(stabilizers))
+
+        print("Stabilizers for columns " + str(columns) + " and cards_per_columns " + str(cards_per_column) + ": " + str(stabilizers))
+
+                
 

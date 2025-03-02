@@ -62,9 +62,9 @@ def recreate_data(columns, cards_per_column, test):
     
     return recreated_data
 
-for column_number in range(25):
+for column_number in range(1, 25):
     columns = generate_column__array(column_number)
-    for cards_per_column in range(25):
+    for cards_per_column in range(1, 25):
 
         data=init_dictionary(columns, cards_per_column)
         all_values=(get_all_values(data))
@@ -76,7 +76,7 @@ for column_number in range(25):
                 print ("Test card: " + value)
             test = value
             stabilized = False
-            last_card_position = "null"
+            last_card_position = "0"
             i = 1
 
             while stabilized == False:
@@ -105,7 +105,7 @@ for column_number in range(25):
             stabilizers.append(last_card_position)
             stabilizers = list(dict.fromkeys(stabilizers))
 
-        print("Stabilizers for columns " + str(columns) + " and cards_per_columns " + str(cards_per_column) + ": " + str(stabilizers))
+        print(str(columns) + "; " + str(cards_per_column) + "; " + ':'.join(stabilizers))
 
                 
 
